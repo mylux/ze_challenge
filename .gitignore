@@ -1,0 +1,7 @@
+.idea/
+venv
+.terraform
+*.tfstate
+*.tfstate.backup
+*.pyc
+*.zip

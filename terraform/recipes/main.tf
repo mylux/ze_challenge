@@ -5,6 +5,24 @@ provider "aws" {
 module "lambda_role" {
   source = "../modules/iam/role"
   name = "zedelivery_test_lambda_role"
+  policies = [
+    {
+      name = "backend_lambdas_full_access_dynamodb_instances"
+      statements = [
+        {
+          actions = [
+            "dynamodb:*"
+          ]
+          resources = [
+            module.users_db.table_arn,
+            module.shops_db.table_arn,
+            module.orders_db.table_arn,
+            module.couriers_db.table_arn
+          ]
+        }
+      ]
+    }
+  ]
 
   assume_role_policy = <<EOF
 {
@@ -64,19 +82,33 @@ module "users_lambda" {
   role_name = module.lambda_role.name
 }
 
+module "auth_lambda" {
+  source = "../modules/lambda"
+  handler = "main.main"
+  name = "auth"
+  runtime = "python3.8"
+  source_code_package = var.auth_source_code
+  role_arn = module.lambda_role.arn
+  role_name = module.lambda_role.name
+}
+
 module "users_db" {
   source = "../modules/dynamodb"
-  attributes = var.users_db_keys
+  primary_index_attributes = var.users_db_keys
   billing_mode = "PROVISIONED"
   name = "users"
   read_capacity = 3
   tags = var.tags
   write_capacity = 3
+  local_secondary_indices_keys = [{
+    name = "idx_msisdn"
+    range_key = "msisdn"
+  }]
 }
 
 module "shops_db" {
   source = "../modules/dynamodb"
-  attributes = var.shops_db_keys
+  primary_index_attributes = var.shops_db_keys
   billing_mode = "PROVISIONED"
   name = "shops"
   read_capacity = 3
@@ -86,7 +118,7 @@ module "shops_db" {
 
 module "couriers_db" {
   source = "../modules/dynamodb"
-  attributes = var.couriers_db_keys
+  primary_index_attributes = var.couriers_db_keys
   billing_mode = "PROVISIONED"
   name = "couriers"
   read_capacity = 3
@@ -96,7 +128,7 @@ module "couriers_db" {
 
 module "orders_db" {
   source = "../modules/dynamodb"
-  attributes = var.orders_db_keys
+  primary_index_attributes = var.orders_db_keys
   billing_mode = "PROVISIONED"
   name = "orders"
   read_capacity = 3
@@ -104,39 +136,77 @@ module "orders_db" {
   write_capacity = 3
 }
 
-module "ze_entry" {
-  source = "../modules/api_gateway"
-  api_backends = [
-    {
-      method = "POST"
-      uri = "/users"
-      target_arn = module.users_lambda.invoke_arn
-      function_name = module.users_lambda.function_name
-    },
-    {
-      method = "POST"
-      uri = "/orders"
-      target_arn = module.orders_lambda.invoke_arn
-      function_name = module.orders_lambda.function_name
-    },
-    {
-      method = "POST"
-      uri = "/couriers"
-      target_arn = module.couriers_lambda.invoke_arn
-      function_name = module.couriers_lambda.function_name
-    },
-    {
-      method = "POST"
-      uri = "/shops"
-      target_arn = module.shops_lambda.invoke_arn
-      function_name = module.shops_lambda.function_name
-    }
-  ]
+module "ze_entrypoint_api" {
+  source = "../modules/api_gateway/api"
   api_name = "ze_delivery"
+  auth_lambda_name = module.auth_lambda.function_name
+  auth_lambda_uri = module.auth_lambda.invoke_arn
+  authorizer_name = "ze_entrypoint_authorizer"
   tags = var.tags
+  enable_logging = true
+  integrations = [
+    module.ze_entrypoint_user_create_route.integration_id,
+    module.ze_entrypoint_couriers_route.integration_id,
+    module.ze_entrypoint_orders_route.integration_id,
+    module.ze_entrypoint_shops_route.integration_id,
+    module.ze_entrypoint_users_login_route.integration_id
+  ]
 }
 
-module "site_s3" {
-  source = "../modules/static_site/"
-  name = "test-lux-zedelivery"
+module "ze_entrypoint_user_create_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.users_lambda.invoke_arn
+  destination_name = module.users_lambda.function_name
+  method = "POST"
+  parent_id = module.ze_entrypoint_api.root_resource_id
+  uri = "users"
 }
+
+module "ze_entrypoint_users_login_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.users_lambda.invoke_arn
+  destination_name = module.users_lambda.function_name
+  method = "PUT"
+  parent_id = module.ze_entrypoint_user_create_route.resource_id
+  uri = "login"
+}
+
+module "ze_entrypoint_shops_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.shops_lambda.invoke_arn
+  destination_name = module.shops_lambda.function_name
+  method = "POST"
+  parent_id = module.ze_entrypoint_api.root_resource_id
+  uri = "shops"
+  authorizer_id = module.ze_entrypoint_api.authorizer_id
+}
+
+module "ze_entrypoint_couriers_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.couriers_lambda.invoke_arn
+  destination_name = module.couriers_lambda.function_name
+  method = "POST"
+  parent_id = module.ze_entrypoint_api.root_resource_id
+  uri = "couriers"
+  authorizer_id = module.ze_entrypoint_api.authorizer_id
+}
+
+module "ze_entrypoint_orders_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.orders_lambda.invoke_arn
+  destination_name = module.orders_lambda.function_name
+  method = "POST"
+  parent_id = module.ze_entrypoint_api.root_resource_id
+  uri = "orders"
+  authorizer_id = module.ze_entrypoint_api.authorizer_id
+}
+
+//module "site_s3" {
+//  source = "../modules/static_site/"
+//  name = "test-lux-zedelivery"
+//}

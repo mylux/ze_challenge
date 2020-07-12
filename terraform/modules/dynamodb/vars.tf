@@ -16,13 +16,22 @@ variable "write_capacity" {
   type = number
 }
 
-variable "attributes" {
-  description = "Table Attributes. Necessary to declare here any attribute used as hash or range key"
+variable "primary_index_attributes" {
+  description = "Table key Attributes. Necessary to declare here any attribute used as hash or range key"
   type = list(object({
     name = string
     type = string
     key_type = string # Key type is hash or range
   }))
+}
+
+variable "local_secondary_indices_keys" {
+  description = "Optional secondary keys to compose secondary local indices"
+  type = list(object({
+    name = string
+    range_key = string
+  }))
+  default = []
 }
 
 variable "tags" {

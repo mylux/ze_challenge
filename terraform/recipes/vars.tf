@@ -10,6 +10,10 @@ variable "users_source_code" {
   description = "path to users zip package"
 }
 
+variable "auth_source_code" {
+  description = "path to users zip package"
+}
+
 variable "couriers_source_code" {
   description = "Path to couriers zip package"
 }
@@ -32,11 +36,23 @@ variable "users_db_keys" {
     key_type = string # Key type is hash or range
   }))
 
-  default = [{
-    name = "ID"
-    type = "S"
-    key_type = "hash"
-  }]
+  default = [
+    {
+      name = "id"
+      type = "S"
+      key_type = "hash"
+    },
+    {
+      name = "created_at"
+      type = "N"
+      key_type = "range"
+    },
+    {
+      name = "msisdn"
+      type = "S"
+      key_type = "none"
+    }
+  ]
 }
 
 variable "shops_db_keys" {
@@ -48,7 +64,7 @@ variable "shops_db_keys" {
   }))
 
   default = [{
-    name = "ID"
+    name = "id"
     type = "S"
     key_type = "hash"
   }]
@@ -63,7 +79,7 @@ variable "orders_db_keys" {
   }))
 
   default = [{
-    name = "ID"
+    name = "id"
     type = "S"
     key_type = "hash"
   }]
@@ -78,8 +94,13 @@ variable "couriers_db_keys" {
   }))
 
   default = [{
-    name = "ID"
+    name = "id"
     type = "S"
     key_type = "hash"
   }]
+}
+
+variable "auth_domain_prefix" {
+  description = "Authentication domain prefix"
+  default = "zedeliveryluxtest"
 }
