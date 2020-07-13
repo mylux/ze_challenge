@@ -15,9 +15,13 @@ module "lambda_role" {
           ]
           resources = [
             module.users_db.table_arn,
+            "${module.users_db.table_arn}/index/*",
             module.shops_db.table_arn,
+            "${module.shops_db.table_arn}/index/*",
             module.orders_db.table_arn,
-            module.couriers_db.table_arn
+            "${module.orders_db.table_arn}/index/*",
+            module.couriers_db.table_arn,
+            "${module.couriers_db.table_arn}/index/*",
           ]
         }
       ]
@@ -100,9 +104,9 @@ module "users_db" {
   read_capacity = 3
   tags = var.tags
   write_capacity = 3
-  local_secondary_indices_keys = [{
+  global_secondary_indices_keys = [{
     name = "idx_msisdn"
-    range_key = "msisdn"
+    hash_key = "msisdn"
   }]
 }
 
@@ -146,10 +150,11 @@ module "ze_entrypoint_api" {
   enable_logging = true
   integrations = [
     module.ze_entrypoint_user_create_route.integration_id,
+    module.ze_entrypoint_users_login_route.integration_id,
+    module.ze_entrypoint_users_get_data_route.integration_id,
     module.ze_entrypoint_couriers_route.integration_id,
     module.ze_entrypoint_orders_route.integration_id,
     module.ze_entrypoint_shops_route.integration_id,
-    module.ze_entrypoint_users_login_route.integration_id
   ]
 }
 
@@ -171,6 +176,17 @@ module "ze_entrypoint_users_login_route"{
   method = "PUT"
   parent_id = module.ze_entrypoint_user_create_route.resource_id
   uri = "login"
+}
+
+module "ze_entrypoint_users_get_data_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.users_lambda.invoke_arn
+  destination_name = module.users_lambda.function_name
+  method = "GET"
+  uri = "view"
+  parent_id = module.ze_entrypoint_user_create_route.resource_id
+  authorizer_id = module.ze_entrypoint_api.authorizer_id
 }
 
 module "ze_entrypoint_shops_route"{

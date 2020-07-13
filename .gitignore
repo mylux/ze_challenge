@@ -1,4 +1,5 @@
 .idea/
+lambda_package/
 venv
 .terraform
 *.tfstate

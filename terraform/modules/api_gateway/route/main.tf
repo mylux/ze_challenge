@@ -24,5 +24,5 @@ resource "aws_lambda_permission" "invoke_permission_api_gateway" {
   action = "lambda:InvokeFunction"
   function_name = var.destination_name
   principal = "apigateway.amazonaws.com"
-  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.api_id}/*/POST/${var.uri}"
+  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.api_id}/*/${var.method}${aws_api_gateway_resource.resource.path}"
 }

@@ -23,13 +23,14 @@ resource "aws_dynamodb_table" "dynamo_table" {
     }
   }
 
-  dynamic "local_secondary_index" {
-    for_each = var.local_secondary_indices_keys
+  dynamic "global_secondary_index" {
+    for_each = var.global_secondary_indices_keys
     content {
-      name = local_secondary_index.value.name
-      range_key = local_secondary_index.value.range_key
-      projection_type = "INCLUDE"
-      non_key_attributes = ["msisdn"]
+      name = global_secondary_index.value.name
+      hash_key = global_secondary_index.value.hash_key
+      projection_type = "KEYS_ONLY"
+      read_capacity = var.read_capacity
+      write_capacity = var.write_capacity
     }
   }
 

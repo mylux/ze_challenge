@@ -43,11 +43,6 @@ variable "users_db_keys" {
       key_type = "hash"
     },
     {
-      name = "created_at"
-      type = "N"
-      key_type = "range"
-    },
-    {
       name = "msisdn"
       type = "S"
       key_type = "none"

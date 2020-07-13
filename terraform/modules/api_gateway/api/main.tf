@@ -5,6 +5,10 @@ resource "aws_api_gateway_rest_api" "api" {
   tags = var.tags
 }
 
+locals {
+  md5_file = filemd5("${path.module}/main.tf")
+}
+
 resource "aws_api_gateway_authorizer" "auth" {
   name                   = var.authorizer_name
   rest_api_id            = aws_api_gateway_rest_api.api.id
@@ -14,6 +18,7 @@ resource "aws_api_gateway_authorizer" "auth" {
 
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.api.id
+  stage_description = "Deployment meta data: ${local.md5_file}"
   depends_on = [var.integrations]
   lifecycle {
     create_before_destroy = true

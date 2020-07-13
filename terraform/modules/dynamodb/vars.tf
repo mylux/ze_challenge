@@ -25,11 +25,11 @@ variable "primary_index_attributes" {
   }))
 }
 
-variable "local_secondary_indices_keys" {
+variable "global_secondary_indices_keys" {
   description = "Optional secondary keys to compose secondary local indices"
   type = list(object({
     name = string
-    range_key = string
+    hash_key = string
   }))
   default = []
 }
