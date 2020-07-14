@@ -1,0 +1,2 @@
+class InexistentUser(Exception):
+    pass

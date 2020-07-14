@@ -3,6 +3,7 @@ resource "aws_lambda_function" "function" {
   function_name = var.name
   role          = var.role_arn
   handler       = var.handler
+  layers        = var.layers
 
   source_code_hash = filebase64sha256(var.source_code_package)
 

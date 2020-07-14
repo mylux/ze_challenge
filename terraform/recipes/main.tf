@@ -45,9 +45,15 @@ module "lambda_role" {
 EOF
 }
 
+module "base_layer" {
+  source = "../modules/lambda/layer"
+  name = "base"
+  package_path = var.base_layer_source_code
+  compatible_runtimes = ["python3.8"]
+}
 
 module "orders_lambda" {
-  source = "../modules/lambda"
+  source = "../modules/lambda/function"
   handler = "main.main"
   name = "orders"
   runtime = "python3.8"
@@ -57,7 +63,7 @@ module "orders_lambda" {
 }
 
 module "shops_lambda" {
-  source = "../modules/lambda"
+  source = "../modules/lambda/function"
   handler = "main.main"
   name = "shops"
   runtime = "python3.8"
@@ -67,7 +73,7 @@ module "shops_lambda" {
 }
 
 module "couriers_lambda" {
-  source = "../modules/lambda"
+  source = "../modules/lambda/function"
   handler = "main.main"
   name = "couriers"
   runtime = "python3.8"
@@ -77,17 +83,18 @@ module "couriers_lambda" {
 }
 
 module "users_lambda" {
-  source = "../modules/lambda"
+  source = "../modules/lambda/function"
   handler = "main.main"
   name = "users"
   runtime = "python3.8"
   source_code_package = var.users_source_code
   role_arn = module.lambda_role.arn
   role_name = module.lambda_role.name
+  layers = [module.base_layer.layer_arn]
 }
 
 module "auth_lambda" {
-  source = "../modules/lambda"
+  source = "../modules/lambda/function"
   handler = "main.main"
   name = "auth"
   runtime = "python3.8"
@@ -148,14 +155,14 @@ module "ze_entrypoint_api" {
   authorizer_name = "ze_entrypoint_authorizer"
   tags = var.tags
   enable_logging = true
-  integrations = [
-    module.ze_entrypoint_user_create_route.integration_id,
-    module.ze_entrypoint_users_login_route.integration_id,
-    module.ze_entrypoint_users_get_data_route.integration_id,
-    module.ze_entrypoint_couriers_route.integration_id,
-    module.ze_entrypoint_orders_route.integration_id,
-    module.ze_entrypoint_shops_route.integration_id,
-  ]
+  integrations = flatten([
+    module.ze_entrypoint_user_create_route.integration_ids,
+    module.ze_entrypoint_users_login_route.integration_ids,
+    module.ze_entrypoint_users_get_data_route.integration_ids,
+    module.ze_entrypoint_couriers_route.integration_ids,
+    module.ze_entrypoint_orders_route.integration_ids,
+    module.ze_entrypoint_shops_route.integration_ids,
+  ])
 }
 
 module "ze_entrypoint_user_create_route"{
@@ -164,6 +171,8 @@ module "ze_entrypoint_user_create_route"{
   destination_arn = module.users_lambda.invoke_arn
   destination_name = module.users_lambda.function_name
   method = "POST"
+  other_methods = ["PUT"]
+  other_authorizer_ids = [module.ze_entrypoint_api.authorizer_id]
   parent_id = module.ze_entrypoint_api.root_resource_id
   uri = "users"
 }

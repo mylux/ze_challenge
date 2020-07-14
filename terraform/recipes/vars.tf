@@ -18,6 +18,10 @@ variable "couriers_source_code" {
   description = "Path to couriers zip package"
 }
 
+variable "base_layer_source_code" {
+  description = "Path to base layer zip package"
+}
+
 variable "tags" {
   description = "Tags to be propagated to all resources"
   type = map(string)

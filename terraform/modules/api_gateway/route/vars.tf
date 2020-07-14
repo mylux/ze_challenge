@@ -14,6 +14,16 @@ variable "method" {
   description = "The method in this route"
 }
 
+variable "other_methods" {
+  description = "Other methods to have this route applied to"
+  default = []
+}
+
+variable "other_authorizer_ids" {
+  description = "List of ids to authorizers to the methods in other_methods variable. If it contains only one, than this one will be applied for all elements of this list"
+  default = []
+}
+
 variable "authorizer_id" {
   description = "The id to the API authorizer"
   default = null

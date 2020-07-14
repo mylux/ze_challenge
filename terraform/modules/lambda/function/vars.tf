@@ -26,3 +26,9 @@ variable "role_arn" {
 variable "role_name" {
   description = "Lambda execution role Name"
 }
+
+variable "layers" {
+  description = "List of layer ARNs"
+  type = list
+  default = []
+}
