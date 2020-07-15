@@ -60,6 +60,7 @@ module "orders_lambda" {
   source_code_package = var.orders_source_code
   role_arn = module.lambda_role.arn
   role_name = module.lambda_role.name
+  layers = [module.base_layer.layer_arn]
 }
 
 module "shops_lambda" {
@@ -70,6 +71,7 @@ module "shops_lambda" {
   source_code_package = var.shops_source_code
   role_arn = module.lambda_role.arn
   role_name = module.lambda_role.name
+  layers = [module.base_layer.layer_arn]
 }
 
 module "couriers_lambda" {
@@ -80,6 +82,7 @@ module "couriers_lambda" {
   source_code_package = var.couriers_source_code
   role_arn = module.lambda_role.arn
   role_name = module.lambda_role.name
+  layers = [module.base_layer.layer_arn]
 }
 
 module "users_lambda" {
@@ -125,6 +128,10 @@ module "shops_db" {
   read_capacity = 3
   tags = var.tags
   write_capacity = 3
+  global_secondary_indices_keys = [{
+    name = "idx_username"
+    hash_key = "username"
+  }]
 }
 
 module "couriers_db" {
@@ -135,6 +142,12 @@ module "couriers_db" {
   read_capacity = 3
   tags = var.tags
   write_capacity = 3
+  global_secondary_indices_keys = [
+    {
+      name = "idx_username"
+      hash_key = "username"
+    }
+  ]
 }
 
 module "orders_db" {
@@ -145,6 +158,21 @@ module "orders_db" {
   read_capacity = 3
   tags = var.tags
   write_capacity = 3
+  global_secondary_indices_keys = [
+    {
+      name = "idx_courier_id"
+      hash_key = "courier_id"
+    },
+    {
+      name = "idx_shop_id"
+      hash_key = "shop_id"
+    },
+    {
+      name = "idx_user_id"
+      hash_key = "user_id"
+    }
+  ]
+  fields_to_copy_to_index = "ALL"
 }
 
 module "ze_entrypoint_api" {
@@ -160,7 +188,8 @@ module "ze_entrypoint_api" {
     module.ze_entrypoint_users_login_route.integration_ids,
     module.ze_entrypoint_users_get_data_route.integration_ids,
     module.ze_entrypoint_couriers_route.integration_ids,
-    module.ze_entrypoint_orders_route.integration_ids,
+    module.ze_entrypoint_orders_place_list_update_route.integration_ids,
+    module.ze_entrypoint_orders_amend_route.integration_ids,
     module.ze_entrypoint_shops_route.integration_ids,
   ])
 }
@@ -206,6 +235,28 @@ module "ze_entrypoint_shops_route"{
   method = "POST"
   parent_id = module.ze_entrypoint_api.root_resource_id
   uri = "shops"
+  other_methods = ["PUT"]
+  other_authorizer_ids = [module.ze_entrypoint_api.authorizer_id]
+}
+
+module "ze_entrypoint_shops_login_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.shops_lambda.invoke_arn
+  destination_name = module.shops_lambda.function_name
+  method = "PUT"
+  parent_id = module.ze_entrypoint_shops_route.resource_id
+  uri = "login"
+}
+
+module "ze_entrypoint_shops_get_data_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.shops_lambda.invoke_arn
+  destination_name = module.shops_lambda.function_name
+  method = "GET"
+  uri = "view"
+  parent_id = module.ze_entrypoint_shops_route.resource_id
   authorizer_id = module.ze_entrypoint_api.authorizer_id
 }
 
@@ -217,10 +268,32 @@ module "ze_entrypoint_couriers_route"{
   method = "POST"
   parent_id = module.ze_entrypoint_api.root_resource_id
   uri = "couriers"
+  other_methods = ["PUT"]
+  other_authorizer_ids = [module.ze_entrypoint_api.authorizer_id]
+}
+
+module "ze_entrypoint_couriers_login_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.couriers_lambda.invoke_arn
+  destination_name = module.couriers_lambda.function_name
+  method = "PUT"
+  parent_id = module.ze_entrypoint_couriers_route.resource_id
+  uri = "login"
+}
+
+module "ze_entrypoint_couriers_get_data_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.couriers_lambda.invoke_arn
+  destination_name = module.couriers_lambda.function_name
+  method = "GET"
+  parent_id = module.ze_entrypoint_couriers_route.resource_id
+  uri = "view"
   authorizer_id = module.ze_entrypoint_api.authorizer_id
 }
 
-module "ze_entrypoint_orders_route"{
+module "ze_entrypoint_orders_place_list_update_route"{
   source = "../modules/api_gateway/route"
   api_id = module.ze_entrypoint_api.api_id
   destination_arn = module.orders_lambda.invoke_arn
@@ -228,6 +301,19 @@ module "ze_entrypoint_orders_route"{
   method = "POST"
   parent_id = module.ze_entrypoint_api.root_resource_id
   uri = "orders"
+  authorizer_id = module.ze_entrypoint_api.authorizer_id
+  other_methods = ["GET", "PUT"]
+  other_authorizer_ids = [module.ze_entrypoint_api.authorizer_id]
+}
+
+module "ze_entrypoint_orders_amend_route"{
+  source = "../modules/api_gateway/route"
+  api_id = module.ze_entrypoint_api.api_id
+  destination_arn = module.orders_lambda.invoke_arn
+  destination_name = module.orders_lambda.function_name
+  method = "PUT"
+  parent_id = module.ze_entrypoint_orders_place_list_update_route.resource_id
+  uri = "amend"
   authorizer_id = module.ze_entrypoint_api.authorizer_id
 }
 

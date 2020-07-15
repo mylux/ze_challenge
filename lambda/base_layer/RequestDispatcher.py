@@ -16,22 +16,33 @@ class RequestDispatcher:
         ).get(
             re.sub("/$", "", self.__request_data.get('path'))
         )
-
         status_code: int = 200
-        body: str = ""
+        result: str = ''
+        request_data: dict = {}
 
         try:
-            body = json.dumps({
-                'result': route_destination(
-                    json.loads(
-                        self.__request_data['body'] if self.__request_data['body'] else '{}'
-                    ),
+            request_data: dict = json.loads(
+                self.__request_data['body'] if self.__request_data['body'] else '{}'
+            )
+        except:
+            status_code = 400
+            result = "Malformed Request Data"
+
+        try:
+            if not result:
+                result = route_destination(
+                    request_data,
                     self.__request_data['requestContext']
                 )
-            }, cls=DecimalEncoder)
         except Exception as e:
             status_code = self.__responses.get(type(e), 500)
+
             if status_code == 500:
                 traceback.print_exc()
+            else:
+                result = str(e)
         finally:
+            body = json.dumps({
+                'result': result
+            }, cls=DecimalEncoder)
             return {'body': body, 'status_code': status_code}

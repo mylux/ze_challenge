@@ -15,7 +15,7 @@ resource "aws_api_gateway_method" "method" {
 resource "aws_api_gateway_method" "other_methods" {
   count = length(var.other_methods)
   authorization = var.other_authorizer_ids == []? "NONE": "CUSTOM"
-  authorizer_id = length(var.other_authorizer_ids) == 1? var.other_authorizer_ids[0]: var.other_authorizer_ids[count.index]
+  authorizer_id = length(var.other_authorizer_ids) == 1? var.other_authorizer_ids[0]: length(var.other_authorizer_ids) == 0? null : var.other_authorizer_ids[count.index]
   http_method = var.other_methods[count.index]
   resource_id = aws_api_gateway_resource.resource.id
   rest_api_id = var.api_id

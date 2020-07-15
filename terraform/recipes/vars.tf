@@ -62,11 +62,18 @@ variable "shops_db_keys" {
     key_type = string # Key type is hash or range
   }))
 
-  default = [{
-    name = "id"
-    type = "S"
-    key_type = "hash"
-  }]
+  default = [
+    {
+      name = "id"
+      type = "S"
+      key_type = "hash"
+    },
+    {
+      name = "username",
+      type = "S",
+      key_type = "none"
+    }
+  ]
 }
 
 variable "orders_db_keys" {
@@ -77,11 +84,28 @@ variable "orders_db_keys" {
     key_type = string # Key type is hash or range
   }))
 
-  default = [{
-    name = "id"
-    type = "S"
-    key_type = "hash"
-  }]
+  default = [
+    {
+      name = "id"
+      type = "S"
+      key_type = "hash"
+    },
+    {
+      name = "courier_id"
+      type = "S"
+      key_type = "none"
+    },
+    {
+      name = "user_id"
+      type = "S"
+      key_type = "none"
+    },
+    {
+      name = "shop_id"
+      type = "S"
+      key_type = "none"
+    }
+  ]
 }
 
 variable "couriers_db_keys" {
@@ -92,11 +116,18 @@ variable "couriers_db_keys" {
     key_type = string # Key type is hash or range
   }))
 
-  default = [{
-    name = "id"
-    type = "S"
-    key_type = "hash"
-  }]
+  default = [
+    {
+      name = "id"
+      type = "S"
+      key_type = "hash"
+    },
+    {
+      name = "username",
+      type = "S",
+      key_type = "none"
+    }
+  ]
 }
 
 variable "auth_domain_prefix" {

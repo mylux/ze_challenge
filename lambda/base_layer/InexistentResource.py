@@ -1,0 +1,2 @@
+class InexistentResource(Exception):
+    pass

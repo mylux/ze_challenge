@@ -43,3 +43,8 @@ variable "ttl_attribute" {
   description = "Attribute to store the time to Live of a document"
   default = null
 }
+
+variable "fields_to_copy_to_index" {
+  description = "The fields that should be present when a query is performed into an index (this means data replication). Affects all indexes"
+  default = "KEYS_ONLY"
+}

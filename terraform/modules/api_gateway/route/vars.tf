@@ -34,5 +34,5 @@ variable "destination_arn" {
 }
 
 variable "destination_name" {
-  description = "name of the route destination (lambda)"
+  description = "Name of the route destination (lambda)"
 }

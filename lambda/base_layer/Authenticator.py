@@ -15,13 +15,15 @@ class Authenticator:
         users: list = table.query(
             IndexName="idx_%s" % username_field_name,
             KeyConditionExpression=Key(username_field_name).eq(username[username_field_name])
-        )['Items']
-        user_id: str = users[0]['id'] if len(users) > 0 and 'id' in users[0] else {}
+        ).get('Items', [])
+        user_id: str = users[0]['id'] if len(users) > 0 and 'id' in users[0] else ''
+
+        if not user_id:
+            return ""
 
         user: dict = table.get_item(
             Key={'id': user_id}
-        )['Item']
+        ).get('Item', {})
 
-        if 'password' in user:
-            return jwt.encode({"%s.id" % realm: user['id']}, secret, algorithm=alg).decode('utf-8') \
-                if Hasher.verify_password(user['password'], password) else ""
+        return jwt.encode({"%s.id" % realm: user['id']}, secret, algorithm=alg).decode('utf-8') \
+            if Hasher.verify_password(user.get('password', ''), password) else ""

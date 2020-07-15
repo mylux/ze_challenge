@@ -28,7 +28,7 @@ resource "aws_dynamodb_table" "dynamo_table" {
     content {
       name = global_secondary_index.value.name
       hash_key = global_secondary_index.value.hash_key
-      projection_type = "KEYS_ONLY"
+      projection_type = var.fields_to_copy_to_index
       read_capacity = var.read_capacity
       write_capacity = var.write_capacity
     }
