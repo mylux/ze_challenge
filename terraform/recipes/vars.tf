@@ -1,3 +1,12 @@
+variable "jws_key_parameter_name" {
+  description = "Name of the parameter that will store the JWT encode key"
+  default = "jwt_secret_key"
+}
+
+variable "jws_key_parameter_value" {
+  description = "Value of the parameter that will store the JWT encode key"
+}
+
 variable "orders_source_code" {
   description = "Path to Orders zip package"
 }

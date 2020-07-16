@@ -2,6 +2,14 @@ provider "aws" {
   region = "us-east-2"
 }
 
+module "secret_key_store" {
+  source = "../modules/secure_parameter"
+
+  name = var.jws_key_parameter_name
+  value = var.jws_key_parameter_value
+  tags = var.tags
+}
+
 module "lambda_role" {
   source = "../modules/iam/role"
   name = "zedelivery_test_lambda_role"
