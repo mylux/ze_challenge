@@ -1,0 +1,585 @@
+{
+	"info": {
+		"_postman_id": "06e30535-b681-489c-b1f1-97d1e6f7bafc",
+		"name": "ze_challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Enroll",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"msisdn\": \"5511987654322\", \"password\":\"1234567\", \"first_name\": \"John2\", \"surnames\": \"Doe\", \"birth_date\": 315532800}"
+						},
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/users",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"msisdn\": \"5511987654321\", \"password\":\"1234567\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/users/login",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View user data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2Vycy5pZCI6IjE3ZDJjOGJmLTRmMzktNGEwNy05YTQ1LTkyMGZmMWJkYTgzYiJ9.SuKGNNg1jcwpfdZl-KAG_H6KUvw4MTE2k0Bc3cvMshk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/users/view",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"users",
+								"view"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User set data",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2Vycy5pZCI6IjE3ZDJjOGJmLTRmMzktNGEwNy05YTQ1LTkyMGZmMWJkYTgzYiJ9.UXU8bgW5pLlFdv1D4ikNVCoW6fKfW5R6IJKwFmwUoW8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"msisdn\": \"5511987654321\", \"first_name\": \"John\", \"surnames\": \"Doe\", \"birth_date\": 315532801}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/users",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "shops",
+			"item": [
+				{
+					"name": "Shops/login",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"cornershop\", \"password\": \"12345678\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/shops/login",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"shops",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Shops/enroll",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"cornershop\", \"password\":\"12345678\", \"shopName\": \"Corner Shop\", \"shopStatus\": \"Open\", \"address\": \"Rua das Oiticicas 2018 lj 0601\", \"menu\":[{\"item\": \"Coca-Cola 2l\", \"price\": 10.5}] }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/shops",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"shops"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Shops/view",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJTaG9wcy5pZCI6IjEzOGIxYjQzLWIwMDgtNDZjMi04ZjllLTlmYTI4MDk2NTIyMiJ9.3V1EP006jwm1goy6PvCEW1cPI7OodH7SQBLBu25f4QM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/shops/view",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"shops",
+								"view"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Shops/set data",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJTaG9wcy5pZCI6IjEzOGIxYjQzLWIwMDgtNDZjMi04ZjllLTlmYTI4MDk2NTIyMiJ9.3V1EP006jwm1goy6PvCEW1cPI7OodH7SQBLBu25f4QM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"menu\": [\n        {\n            \"item\": \"Coca-Cola 2l\",\n            \"price\": 10.5\n        },\n        {\n            \"item\": \"Budweiser 350ml\",\n            \"price\": 5.2\n        }\n    ],\n    \"username\": \"cornershop\",\n    \"address\": \"Rua das Oiticicas 2018 lj 0601\",\n    \"shopName\": \"Corner Shop\",\n    \"shopStatus\": \"Open\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/shops",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"shops"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "couriers",
+			"item": [
+				{
+					"name": "Couriers/enroll",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"loggi\", \"password\": \"123456789\", \"address\": \"Rua do Guaiaó 2017, Cj 0112\", \"phone\": \"551133456789\", \"courierName\": \"Loggi Delivery\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/couriers",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"couriers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Couriers/View",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJDb3VyaWVycy5pZCI6ImVhYWYyNTVlLTM0NWYtNDRkZi04NjdlLThiOTE1ODIwNjk2NSJ9.fRlgzNjOhm1CtE-glEfdCRQg0H0Gqob0Uj_DSmiRVX4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/couriers/view",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"couriers",
+								"view"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Couriers/login",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"loggi\", \"password\": \"123456789\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/couriers/login",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"couriers",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Couriers/set data",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJDb3VyaWVycy5pZCI6ImVhYWYyNTVlLTM0NWYtNDRkZi04NjdlLThiOTE1ODIwNjk2NSJ9.LjSJ-JljJ3bqEQSaOccipYaz0ldlcVZ8XPSBRR2WRNk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"loggi\",\n    \"address\": \"Rua do Guaiaó 2017, Cj 0112\",\n    \"courierName\": \"Loggi Delivery\",\n    \"phone\": \"551133456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://n2mssccnkb.execute-api.us-east-2.amazonaws.com/production/couriers",
+							"protocol": "https",
+							"host": [
+								"n2mssccnkb",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"couriers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "Orders/Place",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2Vycy5pZCI6IjMzYTE2ZmUwLTk2YmEtNGY2MS04MTA0LTJiMmFkYzgzZDkxYiJ9.WkxOFuEUHrVCPqTCR1Jbk51m4srfCjeTO8ecUDGxbjU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"items\": [\n        {\n            \"item\": \"Coca-cola 2l\",\n            \"price\": 10.5\n        }\n    ],\n    \"user_id\": \"none\",\n    \"shop_id\": \"138b1b43-b008-46c2-8f9e-9fa280965222\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/orders",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Orders/list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2Vycy5pZCI6IjMzYTE2ZmUwLTk2YmEtNGY2MS04MTA0LTJiMmFkYzgzZDkxYiJ9.WkxOFuEUHrVCPqTCR1Jbk51m4srfCjeTO8ecUDGxbjU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/orders",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Orders/Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"06952b3f-c012-4c23-9b95-cd1e39b29962\",\n    \"courier_id\": \"f80068b4-7c3c-4ee8-ba6c-aba809c1bf74\",\n    \"orderStatus\": \"InTransit\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/orders",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Orders/Amend",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJTaG9wcy5pZCI6Ijg4Y2E5NDNhLTA0MDYtNDIyYS04YjhjLTA5NmJjNTYyNmEzNyJ9.rlOCNSw-EKtRjZo8nlTtDj0nPVoFGkIASE_NL6DUzWI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"8116169c-fee5-4aa7-a9fe-347107b5fd59\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m8fxag3bqa.execute-api.us-east-2.amazonaws.com/production/orders/amend",
+							"protocol": "https",
+							"host": [
+								"m8fxag3bqa",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"production",
+								"orders",
+								"amend"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
