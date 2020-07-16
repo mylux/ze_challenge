@@ -35,7 +35,8 @@ def main(event=None, context=None):
             'shops.PUT',
             'orders.GET',
             'orders/view.GET',
-            'orders.PUT'
+            'orders.PUT',
+            'orders/amend.PUT'
         ],
         'Couriers': [
             'couriers.POST',
