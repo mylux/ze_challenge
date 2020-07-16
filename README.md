@@ -2,6 +2,10 @@
 ## Purpose of this application
 This is a serverless approach to the Ze change that was proposed
 
+## High Level Diagram
+
+![](Cloud_Architecture_Ze.png)
+
 ## Into the code
 All the code deployed here consists in two main levels:
 - Terraform: Infra as Code
@@ -251,6 +255,7 @@ Authorization: "\<token received from Users:login\>"
 Authorization: "\<token received from Shops:login\>"
 
 Update the status of an order (add courier id or change its status)
+
 |Attribute|Type|Example|Description
 |---|---|---|---|
 |id|string|anything|Order id
@@ -260,11 +265,11 @@ Update the status of an order (add courier id or change its status)
 ##### PUT /orders/amend
 **Purpose**
 
+Update the items of an order
+
 **Header necessary**:
 
 Authorization: "\<token received from Shops:login\>"
-
-Update the items of an order
 
 |Attribute|Type|Example|Description
 |---|---|---|---|
@@ -280,3 +285,7 @@ List orders belonging to an user or shop
 Authorization: "\<token received from Users:login or Shops: login\>"
 
 If the authentication belongs to a shop, brings orders from a shop, if authentication token belongs to an user, brings the orders placed by this user
+
+
+#### Postman samples
+There is a Postman collection [here](ze_challenge.postman_collection.json) that can be easily imported
