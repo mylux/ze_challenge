@@ -25,7 +25,7 @@ def main(event=None, context=None):
             'users.POST',
             'shops.GET',
             'orders.POST',
-            'orders.GET'
+            'orders.GET',
             'orders/view.GET'
         ],
         'Shops': [

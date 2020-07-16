@@ -31,6 +31,14 @@ module "lambda_role" {
             module.couriers_db.table_arn,
             "${module.couriers_db.table_arn}/index/*",
           ]
+        },
+        {
+          actions = [
+            "ssm:GetParameter"
+          ],
+          resources = [
+            module.secret_key_store.arn
+          ]
         }
       ]
     }
@@ -325,7 +333,7 @@ module "ze_entrypoint_orders_amend_route"{
   authorizer_id = module.ze_entrypoint_api.authorizer_id
 }
 
-module "site_s3" {
-  source = "../modules/static_site/"
-  name = "test-lux-zedelivery"
-}
+//module "site_s3" {
+//  source = "../modules/static_site/"
+//  name = "test-lux-zedelivery"
+//}

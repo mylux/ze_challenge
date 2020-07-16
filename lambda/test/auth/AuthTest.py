@@ -48,7 +48,7 @@ class TestAuth:
     def test_auth_allow(self, parameter_store):
         create_secret_key(parameter_store)
         token = generate_token(parameter_store, "Users")
-        event = generate_event("GET", "users/view", token)
+        event = generate_event("GET", "orders", token)
 
         result = auth_main.main(event, None)
 

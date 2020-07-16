@@ -1,6 +1,6 @@
 variable "jws_key_parameter_name" {
   description = "Name of the parameter that will store the JWT encode key"
-  default = "jwt_secret_key"
+  default = "jws_key_parameter_name"
 }
 
 variable "jws_key_parameter_value" {
