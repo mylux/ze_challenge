@@ -6,3 +6,4 @@ venv
 *.tfstate.backup
 *.pyc
 *.zip
+pack.sh
