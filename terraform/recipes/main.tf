@@ -333,7 +333,7 @@ module "ze_entrypoint_orders_amend_route"{
   authorizer_id = module.ze_entrypoint_api.authorizer_id
 }
 
-//module "site_s3" {
-//  source = "../modules/static_site/"
-//  name = "test-lux-zedelivery"
-//}
+module "site_s3" {
+  source = "../modules/static_site/"
+  name = "test-lux-zedelivery"
+}
