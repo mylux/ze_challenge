@@ -2,6 +2,9 @@ import json
 import re
 import traceback
 from DecimalEncoder import DecimalEncoder
+from decimal import Decimal
+
+from InexistentResource import InexistentResource
 
 
 class RequestDispatcher:
@@ -12,7 +15,7 @@ class RequestDispatcher:
 
     def dispatch(self) -> dict:
         route_destination = self.__routes.get(
-            self.__request_data.get('httpMethod', {})
+            self.__request_data.get('httpMethod'), {}
         ).get(
             re.sub("/$", "", self.__request_data.get('path'))
         )
@@ -20,13 +23,19 @@ class RequestDispatcher:
         result: str = ''
         request_data: dict = {}
 
-        try:
-            request_data: dict = json.loads(
-                self.__request_data['body'] if self.__request_data['body'] else '{}'
+        if route_destination:
+            try:
+                request_data: dict = json.loads(
+                    self.__request_data['body'] if self.__request_data['body'] else '{}', parse_float=Decimal
+                )
+            except:
+                status_code = 400
+                result = "Malformed Request Data"
+        else:
+            result = "Resource %s %s not found" % (
+                self.__request_data.get('httpMethod'), self.__request_data.get('path')
             )
-        except:
-            status_code = 400
-            result = "Malformed Request Data"
+            status_code = 404
 
         try:
             if not result:

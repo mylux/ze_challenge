@@ -54,7 +54,7 @@ module "base_layer" {
 
 module "orders_lambda" {
   source = "../modules/lambda/function"
-  handler = "main.main"
+  handler = "orders_main.main"
   name = "orders"
   runtime = "python3.8"
   source_code_package = var.orders_source_code
@@ -65,7 +65,7 @@ module "orders_lambda" {
 
 module "shops_lambda" {
   source = "../modules/lambda/function"
-  handler = "main.main"
+  handler = "shops_main.main"
   name = "shops"
   runtime = "python3.8"
   source_code_package = var.shops_source_code
@@ -76,7 +76,7 @@ module "shops_lambda" {
 
 module "couriers_lambda" {
   source = "../modules/lambda/function"
-  handler = "main.main"
+  handler = "couriers_main.main"
   name = "couriers"
   runtime = "python3.8"
   source_code_package = var.couriers_source_code
@@ -87,7 +87,7 @@ module "couriers_lambda" {
 
 module "users_lambda" {
   source = "../modules/lambda/function"
-  handler = "main.main"
+  handler = "users_main.main"
   name = "users"
   runtime = "python3.8"
   source_code_package = var.users_source_code
@@ -98,7 +98,7 @@ module "users_lambda" {
 
 module "auth_lambda" {
   source = "../modules/lambda/function"
-  handler = "main.main"
+  handler = "auth_main.main"
   name = "auth"
   runtime = "python3.8"
   source_code_package = var.auth_source_code
