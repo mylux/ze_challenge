@@ -1,3 +1,4 @@
+import boto3
 from boto3.dynamodb.conditions import Attr, Key
 import jwt
 from Hasher import Hasher
@@ -8,7 +9,13 @@ class Authenticator:
     @staticmethod
     def login(table, username: dict, password: str) -> str:
         alg = 'HS256'
-        secret = "o859758tw954tv97t5w9874987t5yw897tn9284gtv529t654btqn348cmr0348ruhq4yvt9t4rgq08nxr8qgfq"
+        ssm_client = boto3.client('ssm')
+
+        secret: str = ssm_client.get_parameter(
+            Name='jws_key_parameter_name',
+            WithDecryption=True
+        )['Parameter']['Value']
+
         username_field_name: str = list(username.keys())[0]
         realm: str = table.name.capitalize()
 

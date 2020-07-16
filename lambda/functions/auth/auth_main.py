@@ -8,7 +8,7 @@ def main(event=None, context=None):
     effect: str = "Allow"
     alg: str = 'HS256'
 
-    ssm_client = boto3.client('ssm')
+    ssm_client = boto3.client('ssm', region_name="us-east-2")
 
     secret: str = ssm_client.get_parameter(
         Name='jws_key_parameter_name',
