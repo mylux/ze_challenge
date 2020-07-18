@@ -1,6 +1,6 @@
 # ze_challenge
 ## Purpose of this application
-This is a serverless approach to the Ze change that was proposed
+This is a serverless approach to the Ze challenge that was proposed
 
 ## High Level Diagram
 
@@ -43,7 +43,7 @@ It is as easy as executing a simple apply command:
 ##### Variables explained
 There are plenty of variables into [terraform/recipes/vars.tf](terraform/recipes/vars.tf)  and all of them are explained into the description field of each one of the variables.
 
-Most of them have default values, although there some ones that need to be specified exterenally (and this is why the many -var parameters)
+Most of them have default values, although there some ones that need to be specified externally (and this is why the many -var parameters)
 
 All the variables with names ending in "source_code" are paths to zip packages containing a lambda or a layer
 
